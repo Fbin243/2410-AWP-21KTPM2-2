@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { fetchPhotoById } from "../api/unsplash-api";
 import { Photo } from "../utils/types";
+import Loading from "./Loading";
 
 const PhotoDetail: React.FC = () => {
   const { id } = useParams();
@@ -18,19 +19,23 @@ const PhotoDetail: React.FC = () => {
     }
   }, [id]);
 
-  if (loading) return <p className="text-center p-4">Loading...</p>;
+  if (loading) return <Loading />;
 
   if (!photo) return <p className="text-center p-4">Photo not found</p>;
 
   return (
-    <div className="p-4 max-w-2xl mx-auto">
-      <button onClick={() => navigate(-1)} className="bg-blue-500 text-white px-4 py-2 rounded-lg mb-4">
-        Back
-      </button>
-      <img src={photo.urls.full} alt={photo.alt_description || "Photo"} className="rounded-md w-full" />
-      <h2 className="text-xl font-semibold mt-4">{photo.alt_description || "Untitled"}</h2>
-      <p className="text-sm text-gray-700 mt-2">by {photo.user.name}</p>
-      <p className="text-gray-600 mt-4">{photo.description || "No description available."}</p>
+    <div className="p-4">
+      <div className="flex flex-col justify-center items-center">
+        <img src={photo.urls.full} alt={photo.alt_description || "Photo"} className="rounded-md h-[500px]" />
+        <h2 className="text-xl font-semibold mt-4">{photo.alt_description || "Untitled"}</h2>
+        <p className="text-sm text-white mt-2">
+          by <strong>{photo.user.name}</strong>{" "}
+        </p>
+        <p className="text-gray-600 my-4">{photo.description || "No description available."}</p>
+        <button onClick={() => navigate(-1)} className="bg-blue-500 text-white px-4 py-2 rounded-lg mb-4">
+          Back
+        </button>
+      </div>
     </div>
   );
 };

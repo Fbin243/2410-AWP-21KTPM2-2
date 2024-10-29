@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { fetchPhotos } from "../api/unsplash-api";
 import { Photo } from "../utils/types";
+import Loading from "./Loading";
 
 const PhotoGallery: React.FC = () => {
   const [photos, setPhotos] = useState<Photo[]>([]);
@@ -12,7 +13,7 @@ const PhotoGallery: React.FC = () => {
   const loadMorePhotos = async () => {
     setLoading(true);
     const newPhotos = await fetchPhotos(page);
-    if (newPhotos.length === 0) setHasMore(false);
+    if (newPhotos.length === 0 || page >= 10) setHasMore(false);
     setPhotos((prev) => [...prev, ...newPhotos]);
     setLoading(false);
   };
@@ -35,12 +36,20 @@ const PhotoGallery: React.FC = () => {
     <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 p-4">
       {photos.map((photo) => (
         <Link to={`/photos/${photo.id}`} key={photo.id} className="cursor-pointer">
-          <img src={photo.urls.small} alt={photo.alt_description || "Photo"} className="rounded-md w-full" />
-          <p className="text-sm text-gray-700 mt-2">{photo.user.name}</p>
+          <img
+            src={photo.urls.small}
+            alt={photo.alt_description || "Photo"}
+            className="rounded-md object-cover aspect-square"
+          />
+          <p className="text-sm text-white mt-2">{photo.user.name}</p>
         </Link>
       ))}
-      {loading && <p className="text-center w-full">Loading...</p>}
-      {!hasMore && <p className="text-center w-full">No more photos to load.</p>}
+      {loading && <Loading />}
+      {!hasMore && (
+        <p className="text-center w-full">
+          No more photos to load. (I have limited API calls for preventing over 50 times per day.)
+        </p>
+      )}
     </div>
   );
 };
