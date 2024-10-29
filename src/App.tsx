@@ -1,42 +1,20 @@
-import axios from "axios";
-import { useEffect, useState } from "react";
+import React, { useState } from "react";
 import PhotoDetail from "./components/PhotoDetail";
-import PhotoGrid from "./components/PhotoGrid";
+import PhotoGallery from "./components/PhotoGallery";
+import { Photo } from "./utils/types";
 
-function App() {
-  const [photos, setPhotos] = useState([]);
-  const [selectedPhoto, setSelectedPhoto] = useState(null);
-
-  useEffect(() => {
-    const fetchPhotos = async () => {
-      try {
-        const response = await axios.get("https://api.unsplash.com/photos", {
-          headers: {
-            Authorization: `Client-ID ${process.env.REACT_APP_UNSPLASH_ACCESS_KEY}`,
-          },
-          params: {
-            per_page: 12,
-          },
-        });
-        setPhotos(response.data);
-      } catch (error) {
-        console.error("Error fetching photos:", error);
-      }
-    };
-
-    fetchPhotos();
-  }, []);
+const App: React.FC = () => {
+  const [selectedPhoto, setSelectedPhoto] = useState<Photo | null>(null);
 
   return (
-    <div className="App">
-      <h1>Unsplash Photo Gallery</h1>
-      {selectedPhoto ? (
-        <PhotoDetail photo={selectedPhoto} onBack={() => setSelectedPhoto(null)} />
-      ) : (
-        <PhotoGrid photos={photos} onSelectPhoto={setSelectedPhoto} />
-      )}
+    <div className="min-h-screen bg-gray-100">
+      <header className="text-center py-4 bg-blue-500 text-white font-bold text-xl">Unsplash Photo Gallery</header>
+      <main className="container mx-auto">
+        <PhotoGallery onSelectPhoto={setSelectedPhoto} />
+        {selectedPhoto && <PhotoDetail photo={selectedPhoto} onClose={() => setSelectedPhoto(null)} />}
+      </main>
     </div>
   );
-}
+};
 
 export default App;
