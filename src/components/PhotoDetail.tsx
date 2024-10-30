@@ -28,7 +28,7 @@ const PhotoDetail: React.FC = () => {
       <div className="flex flex-col justify-center items-center">
         <img src={photo.urls.full} alt={photo.alt_description || "Photo"} className="rounded-md h-[500px]" />
         <h2 className="text-xl font-semibold mt-4">{photo.alt_description || "Untitled"}</h2>
-        <p className="text-sm text-white mt-2">
+        <p className="text-sm text-gray-500 mt-2">
           by <strong>{photo.user.name}</strong>{" "}
         </p>
         <p className="text-gray-600 my-4">{photo.description || "No description available."}</p>

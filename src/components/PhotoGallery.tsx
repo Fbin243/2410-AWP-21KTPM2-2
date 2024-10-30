@@ -33,7 +33,7 @@ const PhotoGallery: React.FC = () => {
   }, [loading, hasMore]);
 
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 p-4">
+    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-5  p-4">
       {photos.map((photo) => (
         <Link to={`/photos/${photo.id}`} key={photo.id} className="cursor-pointer">
           <img
@@ -41,7 +41,7 @@ const PhotoGallery: React.FC = () => {
             alt={photo.alt_description || "Photo"}
             className="rounded-md object-cover aspect-square"
           />
-          <p className="text-sm text-white mt-2">{photo.user.name}</p>
+          <p className="text-sm text-gray-500 mt-2">{photo.user.name}</p>
         </Link>
       ))}
       {loading && <Loading />}
